@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Todo } from '../interfaces/todo';
+import { Todo, TodoInput } from '../interfaces/todo';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-todo-list',
@@ -20,57 +21,80 @@ import { trigger, transition, style, animate } from '@angular/animations';
   ],
 })
 export class TodoListComponent implements OnInit {
+  inputForm: FormGroup;
+  input: TodoInput = {
+    title: '',
+    description: '',
+  };
+
   todos: Todo[] = [];
-  todoTitle: string;
   idForTodo: number;
   filter: string;
   anyRemainingModel: boolean;
 
   constructor() {}
 
+  get title() {
+    return this.inputForm.get('title');
+  }
+
+  get description() {
+    return this.inputForm.get('description');
+  }
+
   ngOnInit(): void {
+    this.inputForm = new FormGroup({
+      title: new FormControl(this.input.title, [
+        Validators.required,
+        Validators.pattern(/^[a-zA-Z0-9]*$/),
+      ]),
+      description: new FormControl(this.input.description, [
+        Validators.required,
+        Validators.maxLength(250),
+      ]),
+    });
+
     this.anyRemainingModel = true;
     this.filter = 'all';
     this.idForTodo = 4;
-    this.todoTitle = '';
     this.todos = [
       {
         id: 1,
         title: 'Finish Angular',
+        description: 'Finish Angular',
         completed: false,
         editing: false,
       },
       {
         id: 2,
         title: 'Finish HW',
+        description: 'Finish HW',
         completed: false,
         editing: false,
       },
       {
         id: 3,
         title: 'Todo Something',
+        description: 'Todo Something',
         completed: true,
         editing: false,
       },
     ];
   }
 
-  onAddTodo(): void {
-    if (this.todoTitle.trim().length === 0) {
-      return;
-    }
-
+  onAddTodo(inputForm: TodoInput): void {
     this.todos = [
       ...this.todos,
       {
         id: this.idForTodo,
-        title: this.todoTitle,
+        title: inputForm.title,
+        description: inputForm.description,
         completed: false,
         editing: false,
       },
     ];
 
-    this.todoTitle = '';
+    this.inputForm.reset();
     this.idForTodo++;
   }
 
