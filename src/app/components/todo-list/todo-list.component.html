@@ -14,16 +14,17 @@
       </th>
       <td>
         <div *ngIf="!todo.editing; else editingTodoTitle" class="todo-item-label"
-          [ngClass]="{ completed: todo.completed }">
+          [ngClass]="{ completed: todo.completed }" (dblclick)="onEditTodo(todo)">
           {{ todo.title }}
         </div>
         <ng-template #editingTodoTitle>
-          <input type="text" class="todo-item-edit" [(ngModel)]="todo.title" />
+          <input type="text" class="todo-item-edit" [(ngModel)]="todo.title" (keyup.enter)="onDoneEdit(todo)"
+            (keyup.esc)="onCancelEdit(todo)" />
         </ng-template>
       </td>
       <td>
         <div *ngIf="!todo.editing; else editingTodoDescription" class="todo-item-label"
-          [ngClass]="{ completed: todo.completed }">
+          [ngClass]="{ completed: todo.completed }" (dblclick)="onEditTodo(todo)">
           {{ todo.description }}
         </div>
         <ng-template #editingTodoDescription>
