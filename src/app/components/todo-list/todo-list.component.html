@@ -1,0 +1,66 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col"></th>
+      <th scope="col">Title</th>
+      <th scope="col">Description</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody *ngFor="let todo of handleTodosFiltered()" @fade>
+    <tr>
+      <th scope="row">
+        <input type="checkbox" [(ngModel)]="todo.completed" />
+      </th>
+      <td>
+        <div *ngIf="!todo.editing; else editingTodoTitle" class="todo-item-label"
+          [ngClass]="{ completed: todo.completed }">
+          {{ todo.title }}
+        </div>
+        <ng-template #editingTodoTitle>
+          <input type="text" class="todo-item-edit" [(ngModel)]="todo.title" />
+        </ng-template>
+      </td>
+      <td>
+        <div *ngIf="!todo.editing; else editingTodoDescription" class="todo-item-label"
+          [ngClass]="{ completed: todo.completed }">
+          {{ todo.description }}
+        </div>
+        <ng-template #editingTodoDescription>
+          <input type="text" class="todo-item-edit" [(ngModel)]="todo.description" (keyup.enter)="onDoneEdit(todo)"
+            (keyup.esc)="onCancelEdit(todo)" />
+        </ng-template>
+      </td>
+      <td>
+        <div class="remove-item" (click)="onDeleteTodo(todo.id)">&times;</div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<div class="extra-container">
+  <div>
+    <label><input type="checkbox" (change)="handleCheckAllTodos($event)" [(ngModel)]="!anyRemainingModel" />
+      Check All</label>
+  </div>
+  <div>{{ remaining() }} items left</div>
+</div>
+
+<div class="extra-container">
+  <div>
+    <button class="button" [ngClass]="{ active: filter === 'all' }" (click)="filter = 'all'">
+      All
+    </button>
+    <button class="button" [ngClass]="{ active: filter === 'active' }" (click)="filter = 'active'">
+      Active
+    </button>
+    <button class="button" [ngClass]="{ active: filter === 'completed' }" (click)="filter = 'completed'">
+      Completed
+    </button>
+  </div>
+
+  <div *ngIf="isAtLeastOneCompleted()">
+    <button class="button" (click)="onClearCompleted()">Clear Completed</button>
+  </div>
+</div>

@@ -1,0 +1,23 @@
+<form [formGroup]="inputForm" #formDir="ngForm" (ngSubmit)="onAddTodo(inputForm.value)">
+  <input placeholder="What needs to be done" formControlName="title" class="todo-input" />
+  <div *ngIf="title.invalid && (title.dirty || title.touched)" class="error-msg">
+    <div *ngIf="title.errors.required">Title is required</div>
+    <div *ngIf="title.errors.pattern">
+      Title cannot contain special characters
+    </div>
+  </div>
+
+  <input placeholder="Description" formControlName="description" class="todo-input" />
+  <div *ngIf="description.invalid && (description.dirty || description.touched)" class="error-msg">
+    <div *ngIf="description.errors.required">Description is required</div>
+    <div *ngIf="description.errors.maxlength">Too Long!</div>
+  </div>
+  <div style="text-align: center">
+    <button *ngIf="inputForm.invalid; else successSubmit" class="btn btn-danger" [disabled]="inputForm.invalid">
+      Submit
+    </button>
+    <ng-template #successSubmit>
+      <button type="submit" class="btn btn-success">Submit</button>
+    </ng-template>
+  </div>
+</form>

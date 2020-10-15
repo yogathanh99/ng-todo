@@ -1,0 +1,30 @@
+
+.todo-input {
+  width: 100%;
+  padding: 10px 18px;
+  font-size: 18px;
+  margin-bottom: 10px;
+
+  &:focus {
+    outline: 0;
+  }
+}
+
+.button {
+  font-size: 14px;
+  background-color: white;
+  appearance: none;
+  margin-right: 10px;
+
+  &:hover {
+    background: lightblue;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.error-msg {
+  color: red;
+}
